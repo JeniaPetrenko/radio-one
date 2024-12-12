@@ -5,7 +5,7 @@ export default function HomePage() {
     <div>
       <main>
         <h1>Radio App</h1>
-        <Link href="/channel">Go to Programms</Link>
+        <Link href="/channels">Go to Programms</Link>
       </main>
     </div>
   );

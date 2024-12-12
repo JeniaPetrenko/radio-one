@@ -9,12 +9,14 @@ export default function ChannelPage() {
 
   return (
     <div>
-      <h1>Programms</h1>
+      <h1>Channels info</h1>
+      <Link href={"/"}>Back to Start</Link>
+      <h2>Programms page</h2>
       <ul>
         {channels.map((channel) => (
           <li key={channel.id}>
-            <Link href={`/program/${channel.id}`}>
-              <a>{channel.name}</a>
+            <Link href={`/episodes/${channel.id}`}>
+              {channel.name} - go to episodes
             </Link>
           </li>
         ))}
