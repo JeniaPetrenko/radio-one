@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ChannelInfo } from "@/app/components/ChannelInfo";
+import { use } from "react";
+import { AudioPlayer } from "@/app/components/AudioPlayer";
 
 interface Channel {
   id: number;
@@ -15,15 +17,19 @@ interface Episode {
   id: string;
   title: string;
   description: string;
-  image: string;
+  imageurl: string | undefined;
+  listenpodfile: { url: string } | undefined;
+  broadcast?: { broadcastfiles: { url: string }[] } | undefined;
   //audioplayer
 }
 
 export default function EpisodesPage({
-  params,
+  params: paramsPromise,
 }: {
-  params: { programId: string };
+  params: Promise<{ programId: string }>;
 }) {
+  const params = use(paramsPromise);
+  const { programId } = params;
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [channel, setChannel] = useState<Channel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +58,8 @@ export default function EpisodesPage({
 
         // Fetch episodes for program
         const episodesResponse = await fetch(
-          `https://api.sr.se/api/v2/episodes/index?format=json&programid=${params.programId}`
+          `https://api.sr.se/api/v2/episodes/index?format=json&programid=${params.programId}
+`
         );
         if (!episodesResponse.ok) {
           throw new Error("Failed to fetch episode data");
@@ -84,13 +91,27 @@ export default function EpisodesPage({
       <div className="card-body">
         <h2>Episodes for Program {params.programId}</h2>
         <ul>
-          {episodes.map((episode) => (
-            <li key={episode.id}>
-              <h3>{episode.title}</h3>
-              <p>{episode.description}</p>
-              <img src={episode.image} alt={episode.title} />
-            </li>
-          ))}
+          {episodes.map((episode) => {
+            // Визначити URL аудіофайлу
+            const audioUrl =
+              episode.listenpodfile?.url ||
+              episode.broadcast?.broadcastfiles?.[0]?.url ||
+              "";
+
+            return (
+              <li key={episode.id}>
+                <h3>{episode.title}</h3>
+                <p>{episode.description}</p>
+                <img
+                  src={episode.imageurl || "/placeholder.jpg"}
+                  alt={episode.title}
+                  width={200}
+                  height={200}
+                />
+                <AudioPlayer audioUrl={audioUrl} />
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

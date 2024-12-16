@@ -66,7 +66,7 @@ export default function ProgramsPage() {
   }, []);
 
   const [error, setError] = useState<string | null>(null);
-  if (error) return setError(error);
+  if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Loading...</div>;
   if (!channel || programs.length === 0) return <div>Loading...</div>;
 
@@ -85,11 +85,12 @@ export default function ProgramsPage() {
             <li key={program.id}>
               <Link href={`/channel/episodes/${program.id}`}>
                 <img
-                  src={program.programimage}
+                  src={program.programimage || "/placeholder.jpg"}
                   alt={program.name}
-                  width={300}
-                  height={300}
+                  width={200}
+                  height={200}
                 />
+
                 <h3>{program.name}</h3>
                 <p>{program.description}</p>
               </Link>
