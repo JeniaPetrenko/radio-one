@@ -190,6 +190,8 @@ a {
 
 .details h2 {
   text-align: center;
+  flex-direction: row;
+  max-width: 1200px;
 }
 
 .rating {
