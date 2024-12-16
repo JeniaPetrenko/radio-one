@@ -19,12 +19,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-align: center;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
   color: #f4f4f4;
-  background: #000;
+  background: #0F172A;
 }
 
 main {
@@ -39,6 +40,7 @@ header {
 
 h1 {
   font-weight: 400;
+  color: #F9A8D4
 }
 
 a {
