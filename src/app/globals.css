@@ -134,6 +134,22 @@ a {
   cursor: pointer;
 }
 
+.btn-start {
+  background: linear-gradient(45deg, #C62680, #c12fba, #3f043c);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.3s ease;
+}
+
+.btn-start:hover {
+  transform: scale(1.05);
+  background: linear-gradient(45deg, #a922a2, #d2358e, #861957);
+}
+
 /* Search box... */
 .search {
   display: flex;

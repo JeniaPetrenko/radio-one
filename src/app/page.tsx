@@ -4,7 +4,9 @@ export default function HomePage() {
   return (
     <main>
       <h1>Radio App</h1>
-      <Link href="/channel">Go to Programs</Link>
+      <Link href="/channel">
+        <button className="btn-start">Get Started</button>
+      </Link>
     </main>
   );
 }

@@ -5,23 +5,8 @@ import { useEffect, useState } from "react";
 import { ChannelInfo } from "@/app/components/ChannelInfo";
 import { use } from "react";
 import { AudioPlayer } from "@/app/components/AudioPlayer";
-
-interface Channel {
-  id: number;
-  name: string;
-  image: string;
-  tagline: string;
-}
-
-interface Episode {
-  id: string;
-  title: string;
-  description: string;
-  imageurl: string | undefined;
-  listenpodfile: { url: string } | undefined;
-  broadcast?: { broadcastfiles: { url: string }[] } | undefined;
-  //audioplayer
-}
+import { Channel, Episode, ChannelResponse } from "@/global";
+import FilterEpisodes from "@/app/components/Filtering";
 
 export default function EpisodesPage({
   params: paramsPromise,
@@ -29,10 +14,11 @@ export default function EpisodesPage({
   params: Promise<{ programId: string }>;
 }) {
   const params = use(paramsPromise);
-  const { programId } = params;
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [channel, setChannel] = useState<Channel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredEpisodes, setFilteredEpisodes] = useState<Episode[]>(episodes);
+  const [filter, setFilter] = useState("");
   // // Тимчасові дані для прикладу
   // const mockEpisodes = [
   //   { id: "1", title: "Episode 1", description: "Description 1" },
@@ -52,7 +38,7 @@ export default function EpisodesPage({
         if (!channelResponse.ok) {
           throw new Error("Failed to fetch channel data");
         }
-        const channelData = await channelResponse.json();
+        const channelData: ChannelResponse = await channelResponse.json();
         console.log("Channel data:", channelData); // Вивести дані каналу
         setChannel(channelData.channel);
 
@@ -67,6 +53,7 @@ export default function EpisodesPage({
         const episodesData = await episodesResponse.json();
         console.log("Episodes data:", episodesData); // Вивести дані епізодів
         setEpisodes(episodesData.episodes);
+        setFilteredEpisodes(episodesData.episodes);
       } catch (error) {
         console.error("Error fetching episodes:", error);
       }
@@ -85,13 +72,35 @@ export default function EpisodesPage({
       <Link href="/channel">Back to Programs</Link>
 
       {channel && (
-        <ChannelInfo image={channel.image} tagline={channel.tagline} />
+        <ChannelInfo
+          image={channel.image}
+          tagline={channel.tagline}
+          imagetemplate={""}
+          color={""}
+          siteurl={""}
+          liveaudio={{
+            id: 0,
+            url: "",
+            statkey: "",
+          }}
+          scheduleurl={""}
+          channeltype={""}
+          xmltvid={""}
+          id={0}
+          name={""}
+        />
       )}
 
+      <h1>Episodes</h1>
+      <FilterEpisodes
+        episodes={episodes}
+        setFilteredEpisodes={setFilteredEpisodes}
+        filter={filter}
+      />
       <div className="card-body">
         <h2>Episodes for Program {params.programId}</h2>
         <ul>
-          {episodes.map((episode) => {
+          {filteredEpisodes.map((episode) => {
             // Визначити URL аудіофайлу
             const audioUrl =
               episode.listenpodfile?.url ||
@@ -105,8 +114,8 @@ export default function EpisodesPage({
                 <img
                   src={episode.imageurl || "/placeholder.jpg"}
                   alt={episode.title}
-                  width={200}
-                  height={200}
+                  width={100}
+                  height={100}
                 />
                 <AudioPlayer audioUrl={audioUrl} />
               </li>

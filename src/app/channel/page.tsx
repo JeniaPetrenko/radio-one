@@ -3,21 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ChannelInfo } from "../components/ChannelInfo";
-
-interface Channel {
-  id: number;
-  name: string;
-  image: string;
-  tagline: string;
-}
-
-interface Program {
-  id: string;
-  name: string;
-  description: string;
-  programcategory: { id: number; name: string };
-  programimage: string;
-}
+import { Channel, Program } from "@/global";
 
 export default function ProgramsPage() {
   // Тимчасові дані для прикладу
@@ -75,11 +61,27 @@ export default function ProgramsPage() {
       <Link href="/">Back to Start</Link>
 
       {channel && (
-        <ChannelInfo image={channel.image} tagline={channel.tagline} />
+        <ChannelInfo
+          image={channel.image}
+          tagline={channel.tagline}
+          imagetemplate={""}
+          color={""}
+          siteurl={""}
+          liveaudio={{
+            id: 0,
+            url: "",
+            statkey: "",
+          }}
+          scheduleurl={""}
+          channeltype={""}
+          xmltvid={""}
+          id={0}
+          name={""}
+        />
       )}
 
       <div className="card-body">
-        <h2>Programs</h2>
+        <h1>Programs</h1>
         <ul>
           {programs.map((program) => (
             <li key={program.id}>
@@ -87,8 +89,8 @@ export default function ProgramsPage() {
                 <img
                   src={program.programimage || "/placeholder.jpg"}
                   alt={program.name}
-                  width={200}
-                  height={200}
+                  width={100}
+                  height={100}
                 />
 
                 <h3>{program.name}</h3>

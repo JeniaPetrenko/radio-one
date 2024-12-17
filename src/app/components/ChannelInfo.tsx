@@ -1,11 +1,7 @@
 //Channel info
+import { Channel } from "../../global";
 
-interface ChannelProps {
-  image: string;
-  tagline: string;
-}
-
-export const ChannelInfo = ({ image, tagline }: ChannelProps) => {
+export const ChannelInfo = ({ image, tagline }: Channel) => {
   return (
     <div>
       <img src={image} alt={tagline} />
