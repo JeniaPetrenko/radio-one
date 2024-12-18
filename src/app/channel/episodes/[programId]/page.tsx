@@ -69,64 +69,62 @@ export default function EpisodesPage({
 
   return (
     <main className="main-container">
-      <div>
-        {channel && (
-          <ChannelInfo
-            image={channel.image}
-            tagline={channel.tagline}
-            imagetemplate={""}
-            color={""}
-            siteurl={""}
-            liveaudio={{
-              id: 0,
-              url: "",
-              statkey: "",
-            }}
-            scheduleurl={""}
-            channeltype={""}
-            xmltvid={""}
-            id={0}
-            name={""}
-          />
-        )}
-        <div className="card-body">
-          <Link href="/channel"> ⬅Back </Link>
-          <h1>Episodes</h1>
-          <FilterEpisodes
-            episodes={episodes}
-            setFilteredEpisodes={setFilteredEpisodes}
-            filter={filter}
-          />
+      {channel && (
+        <ChannelInfo
+          image={channel.image}
+          tagline={channel.tagline}
+          imagetemplate={""}
+          color={""}
+          siteurl={""}
+          liveaudio={{
+            id: 0,
+            url: "",
+            statkey: "",
+          }}
+          scheduleurl={""}
+          channeltype={""}
+          xmltvid={""}
+          id={0}
+          name={""}
+        />
+      )}
 
-          <ul>
-            {filteredEpisodes.map((episode) => {
-              // Визначити URL аудіофайлу
-              const audioUrl =
-                episode.listenpodfile?.url ||
-                episode.broadcast?.broadcastfiles?.[0]?.url ||
-                "";
+      <div className="card-body">
+        <Link className="link" href="/channel">
+          <span>˿</span>Back{" "}
+        </Link>
+        <h1>Episodes</h1>
+        <p style={{ color: "var(--info-color)" }}>Filter</p>
+        <FilterEpisodes
+          episodes={episodes}
+          setFilteredEpisodes={setFilteredEpisodes}
+          filter={filter}
+        />
 
-              return (
-                <li key={episode.id} className="episode-item">
-                  <div className="episode-content">
-                    <img
-                      src={episode.imageurl || "/placeholder.jpg"}
-                      alt={episode.title}
-                      className="episode-image"
-                      width={100}
-                      height={100}
-                    />
-                    <div className="episode-details">
-                      <h3>{episode.title}</h3>
-                      <p>{episode.description}</p>
-                      <AudioPlayer audioUrl={audioUrl} />
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ul>
+          {filteredEpisodes.map((episode) => {
+            // Визначити URL аудіофайлу
+            const audioUrl =
+              episode.listenpodfile?.url ||
+              episode.broadcast?.broadcastfiles?.[0]?.url ||
+              "";
+
+            return (
+              <li key={episode.id} className="card">
+                <img
+                  src={episode.imageurl || "/placeholder.jpg"}
+                  alt={episode.title}
+                  className="card-image"
+                />
+                <div className="card-details">
+                  <h3>{episode.title}</h3>
+                  <p>{episode.description}</p>
+                  <AudioPlayer audioUrl={audioUrl} />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </main>
   );

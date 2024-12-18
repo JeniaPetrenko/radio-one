@@ -70,13 +70,11 @@ export default function FilterEpisodes({
   }, [localFilter, episodes, setFilteredEpisodes]);
 
   return (
-    <div>
-      <input
-        type="text"
-        value={localFilter}
-        onChange={(e) => setLocalFilter(e.target.value)} // Оновлюємо локальний фільтр
-        placeholder="Enter a key word or date"
-      />
-    </div>
+    <input
+      type="text"
+      value={localFilter}
+      onChange={(e) => setLocalFilter(e.target.value)} // Оновлюємо локальний фільтр
+      placeholder="Enter a key word or date"
+    />
   );
 }

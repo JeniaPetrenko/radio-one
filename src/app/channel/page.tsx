@@ -80,22 +80,22 @@ export default function ProgramsPage() {
 
       <div className="card-body">
         <Link className="link" href="/">
-          ⬅Back
+          <span>˿</span>Back
         </Link>{" "}
         <h1>Programs</h1>
         <ul>
           {programs.map((program) => (
-            <li key={program.id}>
+            <li key={program.id} className="card">
               <Link href={`/channel/episodes/${program.id}`}>
                 <img
                   src={program.programimage || "/placeholder.jpg"}
                   alt={program.name}
-                  width={100}
-                  height={100}
+                  className="card-image"
                 />
-
-                <h3>{program.name}</h3>
-                <p>{program.description}</p>
+                <div className="card-details">
+                  <h3>{program.name}</h3>
+                  <p>{program.description}</p>
+                </div>
               </Link>
             </li>
           ))}
