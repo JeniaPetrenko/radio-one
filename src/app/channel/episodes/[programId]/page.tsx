@@ -68,61 +68,66 @@ export default function EpisodesPage({
   if (!channel || episodes.length === 0) return <p>Loading...</p>;
 
   return (
-    <div>
-      <Link href="/channel">Back to Programs</Link>
+    <main className="main-container">
+      <div>
+        {channel && (
+          <ChannelInfo
+            image={channel.image}
+            tagline={channel.tagline}
+            imagetemplate={""}
+            color={""}
+            siteurl={""}
+            liveaudio={{
+              id: 0,
+              url: "",
+              statkey: "",
+            }}
+            scheduleurl={""}
+            channeltype={""}
+            xmltvid={""}
+            id={0}
+            name={""}
+          />
+        )}
+        <div className="card-body">
+          <Link href="/channel"> ⬅Back </Link>
+          <h1>Episodes</h1>
+          <FilterEpisodes
+            episodes={episodes}
+            setFilteredEpisodes={setFilteredEpisodes}
+            filter={filter}
+          />
 
-      {channel && (
-        <ChannelInfo
-          image={channel.image}
-          tagline={channel.tagline}
-          imagetemplate={""}
-          color={""}
-          siteurl={""}
-          liveaudio={{
-            id: 0,
-            url: "",
-            statkey: "",
-          }}
-          scheduleurl={""}
-          channeltype={""}
-          xmltvid={""}
-          id={0}
-          name={""}
-        />
-      )}
+          <ul>
+            {filteredEpisodes.map((episode) => {
+              // Визначити URL аудіофайлу
+              const audioUrl =
+                episode.listenpodfile?.url ||
+                episode.broadcast?.broadcastfiles?.[0]?.url ||
+                "";
 
-      <h1>Episodes</h1>
-      <FilterEpisodes
-        episodes={episodes}
-        setFilteredEpisodes={setFilteredEpisodes}
-        filter={filter}
-      />
-      <div className="card-body">
-        <h2>Episodes for Program {params.programId}</h2>
-        <ul>
-          {filteredEpisodes.map((episode) => {
-            // Визначити URL аудіофайлу
-            const audioUrl =
-              episode.listenpodfile?.url ||
-              episode.broadcast?.broadcastfiles?.[0]?.url ||
-              "";
-
-            return (
-              <li key={episode.id}>
-                <h3>{episode.title}</h3>
-                <p>{episode.description}</p>
-                <img
-                  src={episode.imageurl || "/placeholder.jpg"}
-                  alt={episode.title}
-                  width={100}
-                  height={100}
-                />
-                <AudioPlayer audioUrl={audioUrl} />
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li key={episode.id} className="episode-item">
+                  <div className="episode-content">
+                    <img
+                      src={episode.imageurl || "/placeholder.jpg"}
+                      alt={episode.title}
+                      className="episode-image"
+                      width={100}
+                      height={100}
+                    />
+                    <div className="episode-details">
+                      <h3>{episode.title}</h3>
+                      <p>{episode.description}</p>
+                      <AudioPlayer audioUrl={audioUrl} />
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -57,9 +57,7 @@ export default function ProgramsPage() {
   if (!channel || programs.length === 0) return <div>Loading...</div>;
 
   return (
-    <div>
-      <Link href="/">Back to Start</Link>
-
+    <main className="main-container">
       {channel && (
         <ChannelInfo
           image={channel.image}
@@ -81,6 +79,9 @@ export default function ProgramsPage() {
       )}
 
       <div className="card-body">
+        <Link className="link" href="/">
+          ⬅Back
+        </Link>{" "}
         <h1>Programs</h1>
         <ul>
           {programs.map((program) => (
@@ -100,6 +101,6 @@ export default function ProgramsPage() {
           ))}
         </ul>
       </div>
-    </div>
+    </main>
   );
 }
