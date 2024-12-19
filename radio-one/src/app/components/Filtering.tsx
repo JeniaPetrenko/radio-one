@@ -1,4 +1,5 @@
-import { Episode } from "@/global"; // Тут передбачається, що тип Episode є визначеним у вашому проекті.
+//Filter for the Episodes-page
+import { Episode } from "@/global";
 import { useState, useEffect } from "react";
 
 interface FilterProps {
@@ -12,35 +13,25 @@ export default function FilterEpisodes({
   setFilteredEpisodes,
   filter,
 }: FilterProps) {
-  const [localFilter, setLocalFilter] = useState<string>(filter);
+  const [localFilter, setLocalFilter] = useState(filter);
 
   useEffect(() => {
-    // Перевірка, чи є рядок в форматі дати
     const isDateFilter = (value: string): boolean => {
-      return (
-        /^\d{4}-\d{2}-\d{2}$/.test(value) || // Формат "YYYY-MM-DD"
-        /^\d{4}-\d{2}$/.test(value) || // Формат "YYYY-MM"
-        /^\d{4}$/.test(value) // Формат "YYYY"
-      );
+      return /^\d{4}-\d{2}-\d{2}$/.test(value);
     };
-
-    // Фільтрація епізодів
     const filteredEpisodes = episodes.filter((episode) => {
       if (isDateFilter(localFilter)) {
         const inputDate = new Date(localFilter);
-        const episodeDate = new Date(
-          parseInt(
-            episode.publishdateutc.replace("/Date(", "").replace(")/", "")
-          )
-        ); // перетворення формату дати
+        const episodeDate = new Date(episode.publishdateutc);
 
+        // Для форматів `YYYY` та `YYYY-MM` встановлюємо кінець періоду
         if (localFilter.length === 4) {
-          // Формат "YYYY"
+          // Формат `YYYY`
           inputDate.setMonth(0, 1); // Початок року
           const endDate = new Date(inputDate.getFullYear() + 1, 0, 1); // Кінець року
           return episodeDate >= inputDate && episodeDate < endDate;
         } else if (localFilter.length === 7) {
-          // Формат "YYYY-MM"
+          // Формат `YYYY-MM`
           inputDate.setDate(1); // Початок місяця
           const endDate = new Date(
             inputDate.getFullYear(),
@@ -48,14 +39,14 @@ export default function FilterEpisodes({
             1
           ); // Кінець місяця
           return episodeDate >= inputDate && episodeDate < endDate;
-        } else if (localFilter.length === 10) {
-          // Формат "YYYY-MM-DD"
+        } else {
+          // Формат `YYYY-MM-DD`
           const endDate = new Date(inputDate);
           endDate.setDate(endDate.getDate() + 1); // Наступний день
           return episodeDate >= inputDate && episodeDate < endDate;
         }
       } else {
-        // Фільтрація за назвою епізоду
+        // Фільтруємо за назвою епізоду
         return episode.title.toLowerCase().includes(localFilter.toLowerCase());
       }
     });
@@ -63,7 +54,7 @@ export default function FilterEpisodes({
     // Сортування результатів
     const sortedEpisodes = [...filteredEpisodes].sort((a, b) => {
       if (isDateFilter(localFilter)) {
-        // Сортуємо за датою публікації
+        // Сортуємо за датою
         return (
           new Date(a.publishdateutc).getTime() -
           new Date(b.publishdateutc).getTime()
@@ -83,7 +74,7 @@ export default function FilterEpisodes({
       type="text"
       value={localFilter}
       onChange={(e) => setLocalFilter(e.target.value)} // Оновлюємо локальний фільтр
-      placeholder="Enter a keyword or date"
+      placeholder="Enter a key word or date"
     />
   );
 }
